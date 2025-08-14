@@ -27,6 +27,7 @@ public final class Main extends JavaPlugin {
     private Items items;
     private Locations locations;
     private MainMenu mainMenu;
+    private final ShulkerManager shulkerManager = new ShulkerManager(this);
 
     public static final NamespacedKey NAMESPACED_KEY = new NamespacedKey("treexcastle", "wand");
 

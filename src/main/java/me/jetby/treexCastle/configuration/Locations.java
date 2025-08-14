@@ -52,7 +52,8 @@ public class Locations {
         if (locations.isEmpty()) return null;
 
         for (Location location : locations) {
-            if (tempLocations.containsKey(location)) continue;
+            if (tempLocations.getOrDefault(location, false)) continue;
+            tempLocations.put(location, true);
             return location;
         }
 

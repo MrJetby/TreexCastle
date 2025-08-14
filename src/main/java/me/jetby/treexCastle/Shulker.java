@@ -82,6 +82,7 @@ public class Shulker {
 
         Holo.remove(clone.getId());
 
+        plugin.getLocations().getTempLocations().remove(clone.getLocation());
         plugin.getClones().remove(clone.getId());
     }
 
