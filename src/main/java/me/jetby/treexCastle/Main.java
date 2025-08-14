@@ -30,7 +30,7 @@ public final class Main extends JavaPlugin {
     private final ShulkerManager shulkerManager = new ShulkerManager(this);
     private final Locations locations = new Locations(this, getFile("locations.yml"), getFileConfiguration("locations.yml"));
     private MainMenu mainMenu;
-    private final Version version = new Version(this);
+    private Version version;
 
     public static final NamespacedKey NAMESPACED_KEY = new NamespacedKey("treexcastle", "wand");
 
@@ -49,6 +49,8 @@ public final class Main extends JavaPlugin {
         locations.load();
 
         mainMenu = new MainMenu(this);
+
+        version = new Version(this);
 
         getCommand("shulker").setExecutor(new ShulkerCommand(this));
         getServer().getPluginManager().registerEvents(new ShulkerBlock(this), this);
