@@ -60,6 +60,10 @@
             <name>JodexIndustries Repo</name>
             <url>https://repo.jodex.xyz/releases</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -67,6 +71,12 @@
             <groupId>com.jodexindustries.jguiwrapper</groupId>
             <artifactId>common</artifactId>
             <version>1.0.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.decentsoftware-eu</groupId>
+            <artifactId>decentholograms</artifactId>
+            <version>2.7.11</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>

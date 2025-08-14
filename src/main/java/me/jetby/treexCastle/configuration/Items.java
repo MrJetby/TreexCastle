@@ -13,16 +13,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-@RequiredArgsConstructor
-@Getter
 public class Items {
 
     public record ItemsData(String inv, Integer slot, ItemStack itemStack, Integer chance) {}
 
-    private final Main plugin;
-    private final File file = plugin.getFile("items.yml");
-    private final FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+    private final File file;
+    private final FileConfiguration configuration;
+    public Items(File file) {
+        this.file = file;
+        this.configuration = YamlConfiguration.loadConfiguration(file);
+    }
 
+    @Getter
     private final Map<String, List<ItemsData>> data = new HashMap<>();
 
     public void load() {

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import me.jetby.treexCastle.Main;
+import me.jetby.treexCastle.Shulker;
 import me.jetby.treexCastle.tools.Logger;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -20,12 +21,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class Types {
 
-
     private final Main plugin;
-    private final FileConfiguration config;
-    private final File file = new File(plugin.getDataFolder(), "types");
+    private final File file;
 
-    @Getter private final Map<String, Data> types = new HashMap<>();
+    @Getter private final Map<String, Shulker> types = new HashMap<>();
 
     public void load() {
 
@@ -55,7 +54,7 @@ public class Types {
 
         Material material = Material.valueOf(config.getString("type", "STONE"));
         int durability = config.getInt("durability", 50);
-        String lootAmount = config.getString("1");
+        String lootAmount = config.getString("lootAmount", "1");
         int spawnChance = config.getInt("spawnChance", 50);
         boolean explosion = config.getBoolean("explosion.enable", false);
         int explosionDamage = config.getInt("explosion.damage", 4);
@@ -72,7 +71,9 @@ public class Types {
 
         List<Items.ItemsData> items = plugin.getItems().getData().get(id);
 
-        types.put(id, new Data(id,
+        types.put(id, new Shulker(
+                plugin,
+                id,
                 material,
                 durability,
                 lootAmount,
@@ -83,24 +84,6 @@ public class Types {
                 items));
     }
 
-    @Getter @Setter
-    @RequiredArgsConstructor
-    public class Data {
-        final String id;
-        final Material material;
-        final int durability;
-        final String lootAmount;
-        final int spawnChance;
-        final boolean explosion;
-        final int explosionDamage;
-        final boolean hologram;
-        final double holoX;
-        final double holoY;
-        final double holoZ;
-        final List<String> hologramLines;
-        final boolean actionbar;
-        final String actionbarText;
-        final List<Items.ItemsData> items;
-    }
+
 
 }
