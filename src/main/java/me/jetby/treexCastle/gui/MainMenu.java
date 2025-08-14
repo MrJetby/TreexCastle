@@ -10,7 +10,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
 public class MainMenu extends AdvancedGui {
-    public static final NamespacedKey CHANCE = new NamespacedKey("vulcanevent", "chance");
+    public static final NamespacedKey CHANCE = new NamespacedKey("treexcastle", "chance");
     public MainMenu(Main plugin) {
 
         super("&0&lTreexCastle | dsc.gg/treexstudio");

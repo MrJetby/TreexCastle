@@ -39,12 +39,18 @@ public class Shulker {
     private final Random RANDOM = new Random();
 
     public void create() {
+        if (plugin.getLocations().getRandomLocation()==null) {
+            Logger.warn("Локация не была найдена");
+            return;
+        }
         ShulkerClones clone = new ShulkerClones();
         clone.setId(UUID.randomUUID().toString());
         clone.setDurability(durability);
         clone.setMaxDurability(durability);
-        clone.setLocation(new Location(Bukkit.getWorld("world"), 0, 110, 0));
-        plugin.getClones().put(clone.getId(), new Main.clone(clone.getId(), clone, this));
+
+        clone.setLocation(plugin.getLocations().getRandomLocation());
+
+        plugin.getClones().put(clone.getId(), new Main.Clone(clone.getId(), clone, this));
 
         List<String> lines = new ArrayList<>(hologramLines);
         lines.replaceAll(s -> s.replace("{blocks_left}", String.valueOf(clone.getDurability())));
@@ -54,7 +60,24 @@ public class Shulker {
 
         clone.getLocation().getBlock().setType(material);
     }
+    public void create(Location location) {
+        ShulkerClones clone = new ShulkerClones();
+        clone.setId(UUID.randomUUID().toString());
+        clone.setDurability(durability);
+        clone.setMaxDurability(durability);
 
+        clone.setLocation(location);
+
+        plugin.getClones().put(clone.getId(), new Main.Clone(clone.getId(), clone, this));
+
+        List<String> lines = new ArrayList<>(hologramLines);
+        lines.replaceAll(s -> s.replace("{blocks_left}", String.valueOf(clone.getDurability())));
+
+        Location holoLocation = clone.getLocation().clone().add(holoX, holoY, holoZ);
+        Holo.create(lines, holoLocation, clone.getId());
+
+        clone.getLocation().getBlock().setType(material);
+    }
     public void delete(ShulkerClones clone) {
 
         Holo.remove(clone.getId());
