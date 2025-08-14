@@ -32,7 +32,7 @@ public class ShulkerCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
             if (args[0].equalsIgnoreCase("create")) {
-                plugin.getTypes().getTypes().get(args[1]).create();
+                plugin.getTypes().getShulkers().get(args[1]).create();
                 return true;
             }
             if (args[0].equalsIgnoreCase("wand")) {
@@ -58,6 +58,6 @@ public class ShulkerCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return List.of( );
+        return List.of();
     }
 }

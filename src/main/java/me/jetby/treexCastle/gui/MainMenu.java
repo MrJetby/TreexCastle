@@ -5,7 +5,6 @@ import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.treexCastle.Main;
 import me.jetby.treexCastle.Shulker;
-import me.jetby.treexCastle.configuration.Types;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -17,8 +16,8 @@ public class MainMenu extends AdvancedGui {
 
 
         int slot = 0;
-        for (String type : plugin.getTypes().getTypes().keySet()) {
-            Shulker shulker = plugin.getTypes().getTypes().get(type);
+        for (String type : plugin.getTypes().getShulkers().keySet()) {
+            Shulker shulker = plugin.getTypes().getShulkers().get(type);
             int finalSlot = slot;
             registerItem(type, builder -> {
                 builder.slots(finalSlot);

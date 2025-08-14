@@ -80,7 +80,7 @@ public class ChanceEditor extends AdvancedGui {
 
         onClose(event -> {
             saveChanges();
-            Bukkit.getScheduler().runTaskLater(plugin, ()->{new InvEditor(plugin, player, plugin.getTypes().getTypes().get(type)).open(player);}, 1L);
+            Bukkit.getScheduler().runTaskLater(plugin, ()->{new InvEditor(plugin, player, plugin.getTypes().getShulkers().get(type)).open(player);}, 1L);
         });
     }
 

@@ -39,28 +39,23 @@ public class Shulker {
     private final Random RANDOM = new Random();
 
     public void create() {
-        if (plugin.getLocations().getRandomLocation()==null) {
+        Location location = plugin.getLocations().acquireRandomAvailableLocation();
+        if (location == null) {
             Logger.warn("Локация не была найдена");
             return;
         }
-        ShulkerClones clone = new ShulkerClones();
-        clone.setId(UUID.randomUUID().toString());
-        clone.setDurability(durability);
-        clone.setMaxDurability(durability);
-
-        clone.setLocation(plugin.getLocations().getRandomLocation());
-
-        plugin.getClones().put(clone.getId(), new Main.Clone(clone.getId(), clone, this));
-
-        List<String> lines = new ArrayList<>(hologramLines);
-        lines.replaceAll(s -> s.replace("{blocks_left}", String.valueOf(clone.getDurability())));
-
-        Location holoLocation = clone.getLocation().clone().add(holoX, holoY, holoZ);
-        Holo.create(lines, holoLocation, clone.getId());
-
-        clone.getLocation().getBlock().setType(material);
+        createAt(location);
     }
+
     public void create(Location location) {
+        if (!plugin.getLocations().acquire(location)) {
+            Logger.warn("Локация уже занята, пропуск спауна");
+            return;
+        }
+        createAt(location);
+    }
+
+    private void createAt(Location location) {
         ShulkerClones clone = new ShulkerClones();
         clone.setId(UUID.randomUUID().toString());
         clone.setDurability(durability);
@@ -77,12 +72,12 @@ public class Shulker {
         Holo.create(lines, holoLocation, clone.getId());
 
         clone.getLocation().getBlock().setType(material);
+        if (explosion) location.getWorld().createExplosion(location, explosionDamage, false, false);
+
     }
     public void delete(ShulkerClones clone) {
-
         Holo.remove(clone.getId());
-
-        plugin.getLocations().getTempLocations().remove(clone.getLocation());
+        plugin.getLocations().release(clone.getLocation());
         plugin.getClones().remove(clone.getId());
     }
 

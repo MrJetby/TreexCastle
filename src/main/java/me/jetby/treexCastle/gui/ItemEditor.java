@@ -45,7 +45,7 @@ public class ItemEditor extends AdvancedGui {
             saveInv(event.getInventory(), type, inv);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                new InvEditor(plugin, player, plugin.getTypes().getTypes().get(type)).open(player);
+                new InvEditor(plugin, player, plugin.getTypes().getShulkers().get(type)).open(player);
             }, 1L);
         });
     }

@@ -32,23 +32,36 @@ public class Wand implements Listener {
 
         Location location = block.getLocation();
 
+
         if (itemInHand.hasItemMeta() && itemInHand.getItemMeta().getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) {
             e.setCancelled(true);
             if (e.getAction().isLeftClick()) {
-                if (plugin.getLocations().getLocations().contains(location)) {
-                    plugin.getLocations().getLocations().remove(location);
-                    plugin.getLocations().save();
+                boolean removed = plugin.getLocations().removeLocation(location);
+                if (removed) {
                     player.sendTitle("§dTreexCastle", "§cЛокация убрана");
                 } else {
                     player.sendTitle("§dTreexCastle", "§7Локация не найдена");
                 }
             } else if (e.getAction().isRightClick()) {
-                if (!plugin.getLocations().getLocations().contains(location)) {
-                    plugin.getLocations().getLocations().add(location);
-                    player.sendTitle("§dTreexCastle", "§aЛокация добавлена");
-                    plugin.getLocations().save();
-                    plugin.getTypes().getTypes().get(plugin.getShulkerManager().getRandomType()).create(location);
+                boolean added = plugin.getLocations().addLocation(location);
+                if (!added) {
+                    player.sendTitle("§dTreexCastle", "§7Локация уже существует");
+                    return;
                 }
+                player.sendTitle("§dTreexCastle", "§aЛокация добавлена");
+
+                String type = plugin.getShulkerManager().getRandomType();
+                if (type == null) {
+                    player.sendTitle("§dTreexCastle", "§cТип шалкера не выбран (проверьте spawnChance)");
+                    return;
+                }
+
+                if (!plugin.getLocations().acquire(location)) {
+                    player.sendTitle("§dTreexCastle", "§cЛокация уже занята");
+                    return;
+                }
+
+                plugin.getTypes().getShulkers().get(type).create(location);
             }
         }
 

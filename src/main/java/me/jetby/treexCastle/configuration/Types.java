@@ -2,15 +2,12 @@ package me.jetby.treexCastle.configuration;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import me.jetby.treexCastle.Main;
 import me.jetby.treexCastle.Shulker;
 import me.jetby.treexCastle.tools.Logger;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,7 +21,7 @@ public class Types {
     private final Main plugin;
     private final File file;
 
-    @Getter private final Map<String, Shulker> types = new HashMap<>();
+    @Getter private final Map<String, Shulker> shulkers = new HashMap<>();
 
     public void load() {
 
@@ -71,7 +68,7 @@ public class Types {
 
         List<Items.ItemsData> items = plugin.getItems().getData().get(id);
 
-        types.put(id, new Shulker(
+        shulkers.put(id, new Shulker(
                 plugin,
                 id,
                 material,

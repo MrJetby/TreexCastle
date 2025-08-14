@@ -1,7 +1,7 @@
-license:
-  key: "ВСТАВЬТЕ_СЮДА_ВАШ_КЛЮЧ_ЛИЦЕНЗИИ"
 
-debug: false
+# Не трогайте если не знаете что делать
+bStats: true
+update-checker: true
 
 update:
   enable: true
