@@ -18,6 +18,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +79,25 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        for (Clone cloneRecord : new ArrayList<>(clones.values())) {
+            if (cloneRecord == null) continue;
+            try {
+                ShulkerClones sc = cloneRecord.shulkerClone();
+                Shulker sh = cloneRecord.shulker();
+                if (sh != null && sc != null) {
+                    sh.delete(sc);
+                } else if (sc != null) {
+                    if (sc.getLocation() != null && sc.getLocation().getBlock() != null) {
+                        sc.getLocation().getBlock().setType(org.bukkit.Material.AIR);
+                    }
+                    Holo.remove(sc.getId());
+                    locations.reset(sc.getLocation());
+                    clones.remove(sc.getId());
+                }
+            } catch (Exception ex) {
+                Logger.error("Ошибка при удалении клона " + (cloneRecord != null ? cloneRecord.id() : "unknown") + ": " + ex.getMessage());
+            }
+        }
         items.save();
         locations.save();
         if (castlePlaceholders != null) {
