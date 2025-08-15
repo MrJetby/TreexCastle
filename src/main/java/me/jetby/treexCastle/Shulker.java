@@ -75,6 +75,7 @@ public class Shulker {
 
     }
     public void delete(ShulkerClones clone) {
+        clone.getLocation().getBlock().setType(Material.AIR);
         Holo.remove(clone.getId());
         plugin.getLocations().reset(clone.getLocation());
         plugin.getClones().remove(clone.getId());

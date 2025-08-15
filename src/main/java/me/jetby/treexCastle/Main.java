@@ -78,10 +78,6 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for (String str : clones.keySet()) {
-            Clone clone = clones.get(str);
-            clone.shulker.delete(clone.shulkerClone);
-        }
         items.save();
         locations.save();
         if (castlePlaceholders != null) {
