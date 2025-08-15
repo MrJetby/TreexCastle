@@ -14,6 +14,13 @@ https://youtu.be/HtZCLotI2fA?si=aMZuTvXgU7sqLNcl
 - Настройка предметов через GUI (/shulker menu)
 - Поддержка PlaceholderAPI
 
+**Команды:** (permission: treexcastle.admin)
+- /shulker wand - Получить палку для сохранения/удаления локации
+- /shulker menu - Настроить предметы
+- /shulker reload - Перезагрузить конфигурацию
+- /shulker start - Принудительно запустить спавн блоков
+- /shulker stop - Принудительно остановить спавн блоков
+
 **Конфигурация по умолчанию:**
 [config.yml](https://github.com/MrJetby/TreexCastle/blob/master/src/main/resources/config.yml "config.yml")
 [types/default.yml](https://github.com/MrJetby/TreexCastle/blob/master/src/main/resources/types/default.yml "types/default.yml")
