@@ -82,7 +82,7 @@ public class Locations {
         return true;
     }
 
-    public void release(Location location) {
+    public void reset(Location location) {
         if (location == null) return;
         occupied.remove(LocationHandler.serialize(location));
     }

@@ -26,34 +26,54 @@ public class ShulkerCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] args) {
 
+
         if (sender instanceof Player player) {
-            if (args[0].equalsIgnoreCase("menu")) {
-                plugin.getMainMenu().open(player);
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("create")) {
-                plugin.getTypes().getShulkers().get(args[1]).create();
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("wand")) {
-                ItemStack item = new ItemStack(Material.STICK);
-                ItemMeta itemMeta = item.getItemMeta();
-                itemMeta.getPersistentDataContainer().set(NAMESPACED_KEY, PersistentDataType.STRING, "wand");
-                itemMeta.setDisplayName("§dTreexCastle");
-                itemMeta.setLore(List.of(
-                        "§dПКМ §7- §fДобавить локацию",
-                        "§dЛКМ §7- §fУдалить локацию"));
-                item.setItemMeta(itemMeta);
-                player.getInventory().addItem(item);
+            switch (args[0].toLowerCase()) {
+                case "menu":
+                    plugin.getMainMenu().open(player);
 
+                    break;
+                case "wand":
+                    ItemStack item = new ItemStack(Material.STICK);
+                    ItemMeta itemMeta = item.getItemMeta();
+                    itemMeta.getPersistentDataContainer().set(NAMESPACED_KEY, PersistentDataType.STRING, "wand");
+                    itemMeta.setDisplayName("§dTreexCastle");
+                    itemMeta.setLore(List.of(
+                            "§dПКМ §7- §fДобавить локацию",
+                            "§dЛКМ §7- §fУдалить локацию"));
+                    item.setItemMeta(itemMeta);
+                    player.getInventory().addItem(item);
+                    break;
+                case "reload":
+                    long result = reload();
+                    sender.sendMessage("§aУспешная перезагрузка, всего заняло "+result+" мс");
+                    break;
+                default:
+
+            }
+            return true;
+        } else {
+            if (args[0].equalsIgnoreCase("reload")) {
+                long result = reload();
+                sender.sendMessage("§aУспешная перезагрузка, всего заняло "+result+" мс");
                 return true;
             }
-
+            sender.sendMessage("Эту команду можно выполнить только игрок");
+            return true;
         }
+    }
 
-
-
-        return false;
+    private long reload() {
+        long start = System.currentTimeMillis();
+        try {
+            plugin.getCfg().load();
+            plugin.getItems().load();
+            plugin.getTypes().load();
+            plugin.getLocations().load();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return System.currentTimeMillis()-start;
     }
 
     @Override

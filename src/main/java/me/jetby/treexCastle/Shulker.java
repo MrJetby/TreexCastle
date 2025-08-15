@@ -6,7 +6,6 @@ import lombok.Setter;
 import me.jetby.treexCastle.configuration.Items;
 import me.jetby.treexCastle.tools.Holo;
 import me.jetby.treexCastle.tools.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -77,7 +76,7 @@ public class Shulker {
     }
     public void delete(ShulkerClones clone) {
         Holo.remove(clone.getId());
-        plugin.getLocations().release(clone.getLocation());
+        plugin.getLocations().reset(clone.getLocation());
         plugin.getClones().remove(clone.getId());
     }
 
@@ -88,8 +87,7 @@ public class Shulker {
             return;
         }
 
-        List<Items.ItemsData> possibleItems = items;
-        if (possibleItems == null || possibleItems.isEmpty()) return;
+        if (items == null || items.isEmpty()) return;
 
         int minLoot, maxLoot;
         try {
@@ -108,7 +106,7 @@ public class Shulker {
         int lootToDrop = minLoot + RANDOM.nextInt((maxLoot - minLoot) + 1);
 
         List<ItemStack> itemsToDrop = new ArrayList<>();
-        for (Items.ItemsData item : possibleItems) {
+        for (Items.ItemsData item : items) {
             if (RANDOM.nextInt(100) < item.chance()) {
                 itemsToDrop.add(item.itemStack());
             }
@@ -116,7 +114,7 @@ public class Shulker {
 
         if (itemsToDrop.isEmpty()) {
             Logger.warn("No items passed chance check, adding all possible items");
-            for (Items.ItemsData item : possibleItems) {
+            for (Items.ItemsData item : items) {
                 itemsToDrop.add(item.itemStack());
             }
         }

@@ -10,6 +10,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static me.jetby.treexCastle.tools.Hex.colorize;
+
 @RequiredArgsConstructor
 @Getter @Setter
 public class Config {
@@ -53,7 +55,7 @@ public class Config {
         license = configuration.getString("license.key", "NONE");
         update = configuration.getBoolean("update.enable", false);
         time = configuration.getInt("update.time", 1800);
-        msg = configuration.getStringList("update.msg");
+        msg = colorize(configuration.getStringList("update.msg"));
 
         bStats = configuration.getBoolean("bStats", true);
         updateChecker = configuration.getBoolean("update-checker", true);
