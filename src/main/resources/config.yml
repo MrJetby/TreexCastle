@@ -1,6 +1,4 @@
 
-# Не трогайте если не знаете что делать
-bStats: true
 update-checker: true
 
 update:

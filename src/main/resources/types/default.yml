@@ -24,6 +24,6 @@ actionbar:
   enable: true
   msg: '&fУ шалкера осталось {blocks_left} прочности.'
 
-Items:
+Items: {}
 
 Chances: {}

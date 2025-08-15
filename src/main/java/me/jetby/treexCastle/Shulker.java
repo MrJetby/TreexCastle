@@ -10,8 +10,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+
+import static me.jetby.treexCastle.gui.MainMenu.CHANCE;
 
 
 @Getter @Setter
@@ -109,7 +112,11 @@ public class Shulker {
         List<ItemStack> itemsToDrop = new ArrayList<>();
         for (Items.ItemsData item : items) {
             if (RANDOM.nextInt(100) < item.chance()) {
-                itemsToDrop.add(item.itemStack());
+                ItemStack itemStack = item.itemStack();
+                ItemMeta meta = itemStack.getItemMeta();
+                meta.getPersistentDataContainer().remove(CHANCE);
+                itemStack.setItemMeta(meta);
+                itemsToDrop.add(itemStack);
             }
         }
 
