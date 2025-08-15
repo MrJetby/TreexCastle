@@ -32,6 +32,10 @@ public class ShulkerCommand implements CommandExecutor, TabCompleter {
         }
 
         if (sender instanceof Player player) {
+            if (!player.hasPermission("treexcastle.admin")) {
+                player.sendMessage("§cУ вас нет прав на выполнение этой команды");
+                return true;
+            }
             switch (args[0].toLowerCase()) {
                 case "menu":
                     plugin.getMainMenu().open(player);
