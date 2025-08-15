@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static me.jetby.treexCastle.Main.NAMESPACED_KEY;
@@ -26,6 +27,9 @@ public class ShulkerCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] args) {
 
+        if (args.length==0) {
+            return true;
+        }
 
         if (sender instanceof Player player) {
             switch (args[0].toLowerCase()) {
@@ -48,19 +52,36 @@ public class ShulkerCommand implements CommandExecutor, TabCompleter {
                     long result = reload();
                     sender.sendMessage("§aУспешная перезагрузка, всего заняло "+result+" мс");
                     break;
+                case "start":
+                    plugin.getShulkerManager().spawnAllPossible();
+                    sender.sendMessage("§aВы успешно заспавнили все шалкера");
+                    break;
+                case "stop":
+                    plugin.getShulkerManager().removeAllClones();
+                    sender.sendMessage("§aВы успешно очистили все шалкера");
+                    break;
                 default:
 
             }
-            return true;
         } else {
             if (args[0].equalsIgnoreCase("reload")) {
                 long result = reload();
                 sender.sendMessage("§aУспешная перезагрузка, всего заняло "+result+" мс");
                 return true;
             }
+            if (args[0].equalsIgnoreCase("start")) {
+                plugin.getShulkerManager().spawnAllPossible();
+                sender.sendMessage("§aВы успешно заспавнили все шалкера");
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("stop")) {
+                plugin.getShulkerManager().removeAllClones();
+                sender.sendMessage("§aВы успешно очистили все шалкера");
+                return true;
+            }
             sender.sendMessage("Эту команду можно выполнить только игрок");
-            return true;
         }
+        return true;
     }
 
     private long reload() {
@@ -75,9 +96,25 @@ public class ShulkerCommand implements CommandExecutor, TabCompleter {
         }
         return System.currentTimeMillis()-start;
     }
+    List<String> completions = new ArrayList<>();
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return List.of();
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender,
+                                                @NotNull Command command,
+                                                @NotNull String s, @NotNull String[] args) {
+        List<String> completions = new ArrayList<>();
+
+        if (args.length==1) {
+            completions.add("menu");
+            completions.add("wand");
+            completions.add("reload");
+            completions.add("start");
+            completions.add("stop");
+        }
+
+        String input = args[args.length - 1].toLowerCase();
+        completions.removeIf(option -> !option.toLowerCase().startsWith(input));
+
+        return completions;
     }
 }

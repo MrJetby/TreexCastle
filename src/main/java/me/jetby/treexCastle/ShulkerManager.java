@@ -2,10 +2,14 @@ package me.jetby.treexCastle;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import me.jetby.treexCastle.tools.Holo;
+import me.jetby.treexCastle.tools.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -37,7 +41,35 @@ public class ShulkerManager {
         }, 0L, 20L);
 
     }
-
+    public void removeAllClones() {
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            try {
+                for (Main.Clone cloneRecord : new ArrayList<>(plugin.getClones().values())) {
+                    if (cloneRecord == null) continue;
+                    try {
+                        ShulkerClones sc = cloneRecord.shulkerClone();
+                        Shulker sh = cloneRecord.shulker();
+                        if (sh != null && sc != null) {
+                            sh.delete(sc);
+                        } else if (sc != null) {
+                            if (sc.getLocation() != null && sc.getLocation().getBlock() != null) {
+                                sc.getLocation().getBlock().setType(Material.AIR);
+                            }
+                            Holo.remove(sc.getId());
+                            plugin.getLocations().reset(sc.getLocation());
+                            plugin.getClones().remove(sc.getId());
+                        }
+                    } catch (Exception ex) {
+                        Logger.error("Ошибка при удалении клона " + (cloneRecord != null ? cloneRecord.id() : "unknown") + ": " + ex.getMessage());
+                    }
+                }
+            } catch (Exception outer) {
+                Logger.error("Ошибка при массовом удалении клонов: " + outer.getMessage());
+            } finally {
+                plugin.getClones().clear();
+            }
+        });
+    }
     public void spawnAllPossible() {
         if (plugin.getTypes().getShulkers().isEmpty()) return;
 
