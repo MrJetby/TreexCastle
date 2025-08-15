@@ -53,13 +53,13 @@ public class ShulkerBlock implements Listener {
             if (clone[0] == null || shulker[0] == null) {
                 return;
             }
+                if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+                    Bukkit.getScheduler().runTask(plugin, () -> {
+                    e.getBlock().setType(shulker[0].getMaterial());
+                    });
+                }
 
-            if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
-                e.getBlock().setType(shulker[0].getMaterial());
-                e.getPlayer().sendMessage("§cЛомать шалкера в креативе нельзя");
-            } else {
-                e.setCancelled(true);
-            }
+            e.setCancelled(true);
 
             clone[0].setDurability(clone[0].getDurability() - 1);
 
