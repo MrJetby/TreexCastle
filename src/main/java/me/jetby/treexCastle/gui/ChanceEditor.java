@@ -43,6 +43,7 @@ public class ChanceEditor extends AdvancedGui {
             registerItem("slot_" + itemData.slot(), builder -> {
                 builder.slots(itemData.slot())
                         .defaultItem(ItemWrapper.builder(item.getType())
+                                .amount(item.getAmount())
                                 .displayName("&#FB430A&l⭐ &fШанс: &6" + chance[0] + "%")
                                 .lore(List.of(
                                         "&#FB430A&l&m=&#FB4C0E&l&m                                   &m=",
