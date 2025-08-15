@@ -103,9 +103,8 @@ public class Locations {
     public boolean removeLocation(Location location) {
         if (location == null) return false;
         String key = LocationHandler.serialize(location);
-        Iterator<Location> it = locations.iterator();
         boolean removed = false;
-        while (it.hasNext()) {
+        for (Iterator<Location> it = locations.iterator(); it.hasNext(); ) {
             Location loc = it.next();
             if (LocationHandler.serialize(loc).equals(key)) {
                 it.remove();

@@ -106,7 +106,8 @@ public class ShulkerCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender,
                                                 @NotNull Command command,
                                                 @NotNull String s, @NotNull String[] args) {
-        List<String> completions = new ArrayList<>();
+
+        if (!sender.hasPermission("treexcastle.admin")) return completions;
 
         if (args.length==1) {
             completions.add("menu");

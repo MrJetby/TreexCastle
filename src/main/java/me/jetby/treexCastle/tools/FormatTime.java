@@ -14,6 +14,8 @@ public class FormatTime {
         this.config = plugin.getCfg();
     }
 
+    Map<String, String> timeUnits = new HashMap<>();
+
     public String stringFormat(int totalSeconds) {
         int weeks = totalSeconds / (7 * 24 * 3600);
         int days = (totalSeconds % (7 * 24 * 3600)) / (24 * 3600);
@@ -21,7 +23,6 @@ public class FormatTime {
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
 
-        Map<String, String> timeUnits = new HashMap<>();
         timeUnits.put("%weeks%", formatUnit(weeks, config.getFormattedTimeWeeks().get(0), config.getFormattedTimeWeeks().get(1), config.getFormattedTimeWeeks().get(2)));
         timeUnits.put("%days%", formatUnit(days, config.getFormattedTimeDays().get(0), config.getFormattedTimeDays().get(1), config.getFormattedTimeDays().get(2)));
         timeUnits.put("%hours%", formatUnit(hours, config.getFormattedTimeHours().get(0), config.getFormattedTimeHours().get(1), config.getFormattedTimeHours().get(2)));
@@ -35,9 +36,10 @@ public class FormatTime {
         }
         format = format.trim();
         if (format.isEmpty()) {
+            timeUnits.clear();
             return "0 сек";
         }
-
+        timeUnits.clear();
         return format;
     }
 

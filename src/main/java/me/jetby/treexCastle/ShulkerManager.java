@@ -52,15 +52,16 @@ public class ShulkerManager {
                         if (sh != null && sc != null) {
                             sh.delete(sc);
                         } else if (sc != null) {
-                            if (sc.getLocation() != null && sc.getLocation().getBlock() != null) {
-                                sc.getLocation().getBlock().setType(Material.AIR);
+                            if (sc.getLocation( ) != null) {
+                                sc.getLocation( ).getBlock( );
+                                sc.getLocation( ).getBlock( ).setType(Material.AIR);
                             }
                             Holo.remove(sc.getId());
                             plugin.getLocations().reset(sc.getLocation());
                             plugin.getClones().remove(sc.getId());
                         }
                     } catch (Exception ex) {
-                        Logger.error("Ошибка при удалении клона " + (cloneRecord != null ? cloneRecord.id() : "unknown") + ": " + ex.getMessage());
+                        Logger.error("Ошибка при удалении клона " + cloneRecord.id() + ": " + ex.getMessage());
                     }
                 }
             } catch (Exception outer) {

@@ -45,8 +45,6 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         JGuiInitializer.init(this);
 
-        new Hex();
-
         cfg.load();
 
         formatTime = new FormatTime(this);
@@ -92,15 +90,16 @@ public final class Main extends JavaPlugin {
                 if (sh != null && sc != null) {
                     sh.delete(sc);
                 } else if (sc != null) {
-                    if (sc.getLocation() != null && sc.getLocation().getBlock() != null) {
-                        sc.getLocation().getBlock().setType(org.bukkit.Material.AIR);
+                    if (sc.getLocation( ) != null) {
+                        sc.getLocation( ).getBlock( );
+                        sc.getLocation( ).getBlock( ).setType(org.bukkit.Material.AIR);
                     }
                     Holo.remove(sc.getId());
                     locations.reset(sc.getLocation());
                     clones.remove(sc.getId());
                 }
             } catch (Exception ex) {
-                Logger.error("Ошибка при удалении клона " + (cloneRecord != null ? cloneRecord.id() : "unknown") + ": " + ex.getMessage());
+                Logger.error("Ошибка при удалении клона " + cloneRecord.id() + ": " + ex.getMessage());
             }
         }
         items.save();
