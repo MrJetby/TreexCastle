@@ -6,7 +6,9 @@ import me.jetby.treexCastle.Shulker;
 import me.jetby.treexCastle.ShulkerClones;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -36,44 +38,32 @@ public class ShulkerBlock implements Listener {
     }
     @EventHandler
     public void onBreak(BlockBreakEvent e) {
+        Location blockLoc = e.getBlock().getLocation();
+        final ShulkerClones clone = plugin.getShulkerManager().getShulkerCloneAt(blockLoc);
+        final Shulker shulker = plugin.getShulkerManager().getShulkerAt(blockLoc);
 
-        final ShulkerClones[] clone = {plugin.getShulkerManager().getShulkerCloneAt(e.getBlock().getLocation())};
-        final Shulker[] shulker = {plugin.getShulkerManager().getShulkerAt(e.getBlock().getLocation())};
+        if (clone == null || shulker == null) {
+            return;
+        }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Player player = e.getPlayer();
 
-            for (Main.Clone shulkerClone : plugin.getClones().values()) {
-                if (shulkerClone.shulkerClone().getLocation().equals(e.getBlock().getLocation())) {
-                    clone[0] = shulkerClone.shulkerClone();
-                    shulker[0] = shulkerClone.shulker();
-                    break;
-                }
-            }
+        e.setCancelled(true);
 
-            if (clone[0] == null || shulker[0] == null) {
-                return;
-            }
-                if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
-                    Bukkit.getScheduler().runTask(plugin, () -> {
-                    e.getBlock().setType(shulker[0].getMaterial());
-                    });
-                }
+        if (player.getGameMode().equals(GameMode.CREATIVE)) {
+            e.getBlock().setType(shulker.getMaterial());
+        }
 
-            e.setCancelled(true);
+        clone.setDurability(clone.getDurability() - 1);
 
-            clone[0].setDurability(clone[0].getDurability() - 1);
+        if (clone.getDurability() <= 0) {
+            e.getBlock().setType(Material.AIR);
+            shulker.dropRandomItems(clone.getLocation());
+            shulker.delete(clone);
+            return;
+        }
 
-            if (clone[0].getDurability() <= 0) {
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    e.getBlock().setType(Material.AIR);
-                    shulker[0].dropRandomItems(clone[0].getLocation());
-                });
-                shulker[0].delete(clone[0]);
-                return;
-            }
-            shulker[0].updateHologram(clone[0]);
-            if (shulker[0].isActionbar()) shulker[0].sendActionbar(clone[0], e.getPlayer());
-
-        });
+        shulker.updateHologram(clone);
+        if (shulker.isActionbar()) shulker.sendActionbar(clone, player);
     }
 }
