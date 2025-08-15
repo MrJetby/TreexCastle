@@ -5,12 +5,12 @@ import me.jetby.treexCastle.Main;
 import me.jetby.treexCastle.Shulker;
 import me.jetby.treexCastle.ShulkerClones;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 @RequiredArgsConstructor
@@ -43,8 +43,8 @@ public class ShulkerBlock implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 
             for (Main.Clone shulkerClone : plugin.getClones().values()) {
-                if (shulkerClone.clones().getLocation().equals(e.getBlock().getLocation())) {
-                    clone[0] = shulkerClone.clones();
+                if (shulkerClone.shulkerClone().getLocation().equals(e.getBlock().getLocation())) {
+                    clone[0] = shulkerClone.shulkerClone();
                     shulker[0] = shulkerClone.shulker();
                     break;
                 }
@@ -54,7 +54,12 @@ public class ShulkerBlock implements Listener {
                 return;
             }
 
-            e.setCancelled(true);
+            if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+                e.getBlock().setType(shulker[0].getMaterial());
+                e.getPlayer().sendMessage("§cЛомать шалкера в креативе нельзя");
+            } else {
+                e.setCancelled(true);
+            }
 
             clone[0].setDurability(clone[0].getDurability() - 1);
 

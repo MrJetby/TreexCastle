@@ -53,11 +53,6 @@ public class Wand implements Listener {
                         return;
                     }
 
-                    if (!plugin.getLocations().acquire(location)) {
-                        player.sendTitle("§dTreexCastle", "§cЛокация уже занята");
-                        return;
-                    }
-
                     plugin.getTypes().getShulkers().get(type).create(location);
                 }
 

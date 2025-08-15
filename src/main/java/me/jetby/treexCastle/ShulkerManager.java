@@ -75,15 +75,15 @@ public class ShulkerManager {
 
     public ShulkerClones getShulkerCloneAt(Location location) {
         for (Main.Clone shulkerClone : plugin.getClones().values()) {
-            if (shulkerClone.clones().getLocation().equals(location)) {
-                return shulkerClone.clones();
+            if (shulkerClone.shulkerClone().getLocation().equals(location)) {
+                return shulkerClone.shulkerClone();
             }
         }
         return null;
     }
     public Shulker getShulkerAt(Location location) {
         for (Main.Clone shulkerClone : plugin.getClones().values()) {
-            if (shulkerClone.clones().getLocation().equals(location)) {
+            if (shulkerClone.shulkerClone().getLocation().equals(location)) {
                 return shulkerClone.shulker();
             }
         }

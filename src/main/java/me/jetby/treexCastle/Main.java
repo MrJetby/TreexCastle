@@ -38,7 +38,7 @@ public final class Main extends JavaPlugin {
 
     private final Map<String, Clone> clones = new HashMap<>();
 
-    public record Clone(String id, ShulkerClones clones, Shulker shulker) {}
+    public record Clone(String id, ShulkerClones shulkerClone, Shulker shulker) {}
 
     @Override
     public void onEnable() {
@@ -78,6 +78,10 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        for (String str : clones.keySet()) {
+            Clone clone = clones.get(str);
+            clone.shulker.delete(clone.shulkerClone);
+        }
         items.save();
         locations.save();
         if (castlePlaceholders != null) {
