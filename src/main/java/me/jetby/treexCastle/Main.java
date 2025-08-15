@@ -58,16 +58,19 @@ public final class Main extends JavaPlugin {
 
         mainMenu = new MainMenu(this);
 
-        version = new Version(this);
 
         getCommand("shulker").setExecutor(new ShulkerCommand(this));
         getServer().getPluginManager().registerEvents(new ShulkerBlock(this), this);
         getServer().getPluginManager().registerEvents(new Wand(this), this);
-        getServer().getPluginManager().registerEvents(version, this);
 
-        for (String string : version.getAlert()) {
-            Bukkit.getConsoleSender().sendMessage(string);
+        if (cfg.isUpdateChecker()) {
+            version = new Version(this);
+            getServer().getPluginManager().registerEvents(version, this);
+            for (String string : version.getAlert()) {
+                Bukkit.getConsoleSender().sendMessage(string);
+            }
         }
+
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             castlePlaceholders = new CastlePlaceholders(this);
             castlePlaceholders.register();
@@ -75,6 +78,8 @@ public final class Main extends JavaPlugin {
         } else {
             Logger.error("PlaceholderAPI не был найден, поэтому плейсхолдеры будут не доступны!");
         }
+
+        if (cfg.isBStats()) new Metrics(this, 24879);
     }
 
     @Override
