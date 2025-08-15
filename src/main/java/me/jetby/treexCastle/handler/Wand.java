@@ -43,25 +43,24 @@ public class Wand implements Listener {
                     player.sendTitle("§dTreexCastle", "§7Локация не найдена");
                 }
             } else if (e.getAction().isRightClick()) {
-                boolean added = plugin.getLocations().addLocation(location);
-                if (!added) {
-                    player.sendTitle("§dTreexCastle", "§7Локация уже существует");
-                    return;
-                }
-                player.sendTitle("§dTreexCastle", "§aЛокация добавлена");
+                if (!plugin.getLocations().getLocations().contains(location)) {
+                    plugin.getLocations().addLocation(location);
+                    player.sendTitle("§dTreexCastle", "§aЛокация добавлена");
 
-                String type = plugin.getShulkerManager().getRandomType();
-                if (type == null) {
-                    player.sendTitle("§dTreexCastle", "§cТип шалкера не выбран (проверьте spawnChance)");
-                    return;
+                    String type = plugin.getShulkerManager().getRandomType();
+                    if (type == null) {
+                        player.sendTitle("§dTreexCastle", "§cТип шалкера не выбран (проверьте spawnChance)");
+                        return;
+                    }
+
+                    if (!plugin.getLocations().acquire(location)) {
+                        player.sendTitle("§dTreexCastle", "§cЛокация уже занята");
+                        return;
+                    }
+
+                    plugin.getTypes().getShulkers().get(type).create(location);
                 }
 
-                if (!plugin.getLocations().acquire(location)) {
-                    player.sendTitle("§dTreexCastle", "§cЛокация уже занята");
-                    return;
-                }
-
-                plugin.getTypes().getShulkers().get(type).create(location);
             }
         }
 

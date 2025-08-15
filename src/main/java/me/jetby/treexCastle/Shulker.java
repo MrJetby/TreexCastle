@@ -71,8 +71,8 @@ public class Shulker {
         Location holoLocation = clone.getLocation().clone().add(holoX, holoY, holoZ);
         Holo.create(lines, holoLocation, clone.getId());
 
-        clone.getLocation().getBlock().setType(material);
         if (explosion) location.getWorld().createExplosion(location, explosionDamage, false, false);
+        clone.getLocation().getBlock().setType(material);
 
     }
     public void delete(ShulkerClones clone) {

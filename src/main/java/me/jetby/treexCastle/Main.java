@@ -10,7 +10,7 @@ import me.jetby.treexCastle.configuration.Types;
 import me.jetby.treexCastle.gui.MainMenu;
 import me.jetby.treexCastle.handler.ShulkerBlock;
 import me.jetby.treexCastle.handler.Wand;
-import me.jetby.treexCastle.tools.Version;
+import me.jetby.treexCastle.tools.*;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,6 +31,8 @@ public final class Main extends JavaPlugin {
     private final Locations locations = new Locations(this, getFile("locations.yml"), getFileConfiguration("locations.yml"));
     private MainMenu mainMenu;
     private Version version;
+    private FormatTime formatTime;
+    private CastlePlaceholders castlePlaceholders;
 
     public static final NamespacedKey NAMESPACED_KEY = new NamespacedKey("treexcastle", "wand");
 
@@ -42,7 +44,12 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         JGuiInitializer.init(this);
 
+        new Hex();
+
         cfg.load();
+
+        formatTime = new FormatTime(this);
+
         items.load();
         types.load();
         shulkerManager.runTimer();
@@ -60,13 +67,22 @@ public final class Main extends JavaPlugin {
         for (String string : version.getAlert()) {
             Bukkit.getConsoleSender().sendMessage(string);
         }
-
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            castlePlaceholders = new CastlePlaceholders(this);
+            castlePlaceholders.register();
+            Logger.info("Плейсхлодеры успешно зарегистрированы.");
+        } else {
+            Logger.error("PlaceholderAPI не был найден, поэтому плейсхолдеры будут не доступны!");
+        }
     }
 
     @Override
     public void onDisable() {
         items.save();
         locations.save();
+        if (castlePlaceholders != null) {
+            castlePlaceholders.unregister();
+        }
     }
 
     public FileConfiguration getFileConfiguration(String fileName) {

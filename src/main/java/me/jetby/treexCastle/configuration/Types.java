@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static me.jetby.treexCastle.tools.Hex.colorize;
+
 @RequiredArgsConstructor
 public class Types {
 
@@ -61,10 +63,10 @@ public class Types {
         double holoZ = config.getDouble("hologram.z", 0.5);
         List<String> hologramLines = new ArrayList<>();
         if (!config.getStringList("holo").isEmpty()) {
-            hologramLines = config.getStringList("holo");
+            hologramLines = colorize(config.getStringList("holo"));
         }
         boolean actionbar = config.getBoolean("actionbar.enable", false);
-        String actionbarText = config.getString("actionbar.msg");
+        String actionbarText = colorize(config.getString("actionbar.msg"));
 
         List<Items.ItemsData> items = plugin.getItems().getData().get(id);
 

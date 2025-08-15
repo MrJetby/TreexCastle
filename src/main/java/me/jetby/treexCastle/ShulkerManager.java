@@ -1,8 +1,10 @@
 package me.jetby.treexCastle;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.Random;
@@ -12,16 +14,24 @@ public class ShulkerManager {
     private final Main plugin;
     private final Random RANDOM = new Random();
 
+    @Getter
+    private int timeToStart;
+
     public void runTimer() {
         int time = plugin.getCfg().getTime();
-        Bukkit.getScheduler( ).runTaskTimerAsynchronously(plugin, () -> {
-            int t = time;
-            if (t<=0) {
+        timeToStart = time;
+        Bukkit.getScheduler( ).runTaskTimer(plugin, () -> {
+            if (timeToStart<=0) {
                 spawnAllPossible();
-            } else {
-                t = time;
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    for (String string : plugin.getCfg().getMsg()) {
+                        player.sendMessage(string);
+                    }
+                }
+
+                timeToStart = time;
             }
-            t--;
+            timeToStart--;
 
 
         }, 0L, 20L);

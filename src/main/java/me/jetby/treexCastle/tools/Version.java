@@ -1,5 +1,6 @@
 package me.jetby.treexCastle.tools;
 
+import lombok.RequiredArgsConstructor;
 import me.jetby.treexCastle.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,42 +13,28 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class Version implements Listener {
     private final Main plugin;
-    private final String versionLink = "https://raw.githubusercontent.com/MrJetby/TreexEnd/refs/heads/master/VERSION";
-    private final String updateLink = "https://raw.githubusercontent.com/MrJetby/TreexEnd/refs/heads/master/UPDATE_LINK";
+    private final String VERSION = "https://raw.githubusercontent.com/MrJetby/TreexEnd/refs/heads/master/VERSION";
+    private final String UPDATE = "https://raw.githubusercontent.com/MrJetby/TreexEnd/refs/heads/master/UPDATE_LINK";
 
-    private final List<String> oldVersion = new ArrayList<>(List.of(
-            "",
-            "§7-------- §dTreexCastle §7--------",
-            "§d● §fВнимание, доступно обновление, пожалуйста обновите плагин.",
-            "§d● §7Ваша версия: §c" + getVersion() + " §7а последняя §a" + getLastVersion(),
-            "",
-            "§d● §fСкачать тут: §b" + getUpdateLink(),
-            "§7-------------------------",
-            ""
-    ));
-    private final List<String> lastVersion = new ArrayList<>(List.of(
-            "",
-            "§7-------- §dTreexCastle §7--------",
-            "§d● §7Версия плагин: §c" + getVersion(),
-            "",
-            "§d● §aВы используете последнюю версию ✔",
-            "",
-            "§7-------------------------",
-            ""
-    ));
-
-    public Version(Main plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         if (player.hasPermission("treexcastle.version")) {
             if (!isLastVersion()) {
-                   for (String string : oldVersion) {
+                   for (String string : List.of(
+                           "",
+                           "§7-------- §dTreexCastle §7--------",
+                           "§d● §fВнимание, доступно обновление, пожалуйста обновите плагин.",
+                           "§d● §7Ваша версия: §c" + getVersion() + " §7а последняя §a" + getLastVersion(),
+                           "",
+                           "§d● §fСкачать тут: §b" + getUPDATE(),
+                           "§7-------------------------",
+                           ""
+                   )) {
                        player.sendMessage(string);
                    }
             }
@@ -55,7 +42,29 @@ public class Version implements Listener {
     }
 
 
+
     public List<String> getAlert() {
+        List<String> oldVersion = new ArrayList<>(List.of(
+                "",
+                "§7-------- §dTreexCastle §7--------",
+                "§d● §fВнимание, доступно обновление, пожалуйста обновите плагин.",
+                "§d● §7Ваша версия: §c" + getVersion() + " §7а последняя §a" + getLastVersion(),
+                "",
+                "§d● §fСкачать тут: §b" + getUPDATE(),
+                "§7-------------------------",
+                ""
+        ));
+        List<String> lastVersion = new ArrayList<>(List.of(
+                "",
+                "§7-------- §dTreexCastle §7--------",
+                "§d● §7Версия плагин: §c" + getVersion(),
+                "",
+                "§d● §aВы используете последнюю версию ✔",
+                "",
+                "§7-------------------------",
+                ""
+        ));
+
         if (!isLastVersion()) {
             return oldVersion;
         }
@@ -81,12 +90,12 @@ public class Version implements Listener {
     }
 
     public String getLastVersion() {
-        String result = getRaw(versionLink);
+        String result = getRaw(VERSION);
         assert result != null;
         return result;
     }
-    public String getUpdateLink() {
-        String result = getRaw(updateLink);
+    public String getUPDATE() {
+        String result = getRaw(UPDATE);
         assert result != null;
         return result;
     }
@@ -96,7 +105,7 @@ public class Version implements Listener {
     }
 
     public boolean isLastVersion() {
-        String result = getRaw(versionLink);
+        String result = getRaw(VERSION);
         if (result == null) {
             return true;
         }

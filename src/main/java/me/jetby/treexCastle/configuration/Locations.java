@@ -1,5 +1,6 @@
 package me.jetby.treexCastle.configuration;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.jetby.treexCastle.Main;
 import me.jetby.treexCastle.tools.LocationHandler;
@@ -17,6 +18,7 @@ public class Locations {
     private final File file;
     private final FileConfiguration configuration;
 
+    @Getter
     private final List<Location> locations = new ArrayList<>();
     private final Set<String> occupied = new HashSet<>();
     private final Random random = new Random();
@@ -122,7 +124,4 @@ public class Locations {
         return occupied.contains(LocationHandler.serialize(location));
     }
 
-    public List<Location> getLocations() {
-        return new ArrayList<>(locations);
-    }
 }

@@ -11,3 +11,12 @@ update:
   msg:
     - "Колизей был обновлён!"
     - "/warp war"
+
+
+formattedTime:
+  format: "%weeks% %days% %hours% %minutes% %seconds%"
+  weeks: ["неделя", "недели", "недель"]
+  days: ["день", "дня", "дней"]
+  hours: ["час", "часа", "часов"]
+  minutes: ["минута", "минуты", "минут"]
+  seconds: ["секунда", "секунды", "секунд"]
