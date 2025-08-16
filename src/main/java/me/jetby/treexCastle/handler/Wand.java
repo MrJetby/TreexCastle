@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -35,14 +36,14 @@ public class Wand implements Listener {
 
         if (itemInHand.hasItemMeta() && itemInHand.getItemMeta().getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) {
             e.setCancelled(true);
-            if (e.getAction().isLeftClick()) {
+            if (e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                 boolean removed = plugin.getLocations().removeLocation(location);
                 if (removed) {
                     player.sendTitle("§dTreexCastle", "§cЛокация убрана");
                 } else {
                     player.sendTitle("§dTreexCastle", "§7Локация не найдена");
                 }
-            } else if (e.getAction().isRightClick()) {
+            } else if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (!plugin.getLocations().getLocations().contains(location)) {
                     plugin.getLocations().addLocation(location);
                     player.sendTitle("§dTreexCastle", "§aЛокация добавлена");

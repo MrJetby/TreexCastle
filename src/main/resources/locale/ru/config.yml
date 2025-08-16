@@ -1,0 +1,20 @@
+
+update-checker: true
+
+update:
+  enable: true
+  time: 1800 # Интервал старта ивента в секундах
+
+  # удалите строку msg если не нужен
+  msg:
+    - "Колизей был обновлён!"
+    - "/warp war"
+
+
+formattedTime:
+  format: "%weeks% %days% %hours% %minutes% %seconds%"
+  weeks: ["неделя", "недели", "недель"]
+  days: ["день", "дня", "дней"]
+  hours: ["час", "часа", "часов"]
+  minutes: ["минута", "минуты", "минут"]
+  seconds: ["секунда", "секунды", "секунд"]
