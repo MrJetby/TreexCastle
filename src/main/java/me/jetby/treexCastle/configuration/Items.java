@@ -1,8 +1,6 @@
 package me.jetby.treexCastle.configuration;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import me.jetby.treexCastle.Main;
 import me.jetby.treexCastle.tools.Logger;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

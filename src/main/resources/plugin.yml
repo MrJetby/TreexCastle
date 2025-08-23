@@ -2,7 +2,7 @@ name: TreexCastle
 version: '2.0'
 main: me.jetby.treexCastle.Main
 api-version: '1.16'
-load: STARTUP
+load: POSTWORLD
 authors: [ MrJetby ]
 website: https://dsc.gg/treexstudio
 commands:

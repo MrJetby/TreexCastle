@@ -1,15 +1,18 @@
 package me.jetby.treexCastle.tools;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@UtilityClass
 public class Hex {
 
-    private static final Pattern HEX_PATTERN = Pattern.compile("&#([a-fA-F\\d]{6})");
-    private static final char COLOR_CHAR = '§';
-    public static List<String> colorize(List<String> list) {
+    private final Pattern HEX_PATTERN = Pattern.compile("&#([a-fA-F\\d]{6})");
+    private final char COLOR_CHAR = '§';
+    public List<String> colorize(List<String> list) {
 
         List<String> strings = new ArrayList<>();
         for (String string : list) {
@@ -18,7 +21,7 @@ public class Hex {
         return strings;
     }
 
-    public static String colorize(String message) {
+    public String colorize(String message) {
         final Matcher matcher = HEX_PATTERN.matcher(message);
         final StringBuilder builder = new StringBuilder(message.length() + 32);
         while (matcher.find()) {
@@ -36,7 +39,7 @@ public class Hex {
         return translateAlternateColorCodes('&', message);
     }
 
-    public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
+    public String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
         final char[] b = textToTranslate.toCharArray();
 
         for (int i = 0, length = b.length - 1; i < length; ++i) {
@@ -49,7 +52,7 @@ public class Hex {
         return new String(b);
     }
 
-    private static boolean isValidColorCharacter(char c) {
+    private boolean isValidColorCharacter(char c) {
         return (c >= '0' && c <= '9') ||
                 (c >= 'a' && c <= 'f') ||
                 c == 'r' ||

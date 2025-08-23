@@ -38,12 +38,12 @@ public class InvEditor extends AdvancedGui {
                 builder.slots(currentSlot);
                 builder.defaultItem(ItemWrapper.builder(Material.CHEST)
                         .lore(List.of(
-                                Component.text("§6§l§m=                                   ="),
-                                Component.text(""),
-                                Component.text(" §6§lЛКМ §7- §fНастроить предметы "),
-                                Component.text(" §6§lПКМ §7- §fНастроить шансы предметов "),
-                                Component.text(""),
-                                Component.text("§6§l§m=                                   =")
+                                "§6§l§m=                                   =",
+                                "",
+                                " §6§lЛКМ §7- §fНастроить предметы ",
+                                " §6§lПКМ §7- §fНастроить шансы предметов ",
+                                "",
+                                "§6§l§m=                                   ="
                         ))
                         .displayName("&#FB430A&l⭐ &fИнвентарь: &e" + inv)
                         .build());

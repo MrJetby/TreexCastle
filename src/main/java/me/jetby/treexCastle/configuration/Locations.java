@@ -25,12 +25,11 @@ public class Locations {
 
     public void load() {
         locations.clear();
-        occupied.clear();
 
         if (!configuration.getStringList("locations").isEmpty()) {
             for (String locStr : configuration.getStringList("locations")) {
                 Location loc = LocationHandler.deserialize(locStr, plugin);
-                if (loc != null) locations.add(loc);
+                locations.add(loc);
             }
         }
     }

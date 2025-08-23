@@ -45,6 +45,8 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         JGuiInitializer.init(this);
 
+
+        new Metrics(this, 24879);
         cfg.load();
 
         formatTime = new FormatTime(this);
@@ -77,7 +79,6 @@ public final class Main extends JavaPlugin {
             Logger.error("PlaceholderAPI не был найден, поэтому плейсхолдеры будут не доступны!");
         }
 
-        if (cfg.isBStats()) new Metrics(this, 24879);
     }
 
     @Override
