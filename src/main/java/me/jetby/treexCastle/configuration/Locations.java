@@ -1,15 +1,19 @@
 package me.jetby.treexCastle.configuration;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.jetby.treexCastle.Main;
 import me.jetby.treexCastle.tools.LocationHandler;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.Base64;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class Locations {
@@ -18,29 +22,49 @@ public class Locations {
     private final File file;
     private final FileConfiguration configuration;
 
-    @Getter
-    private final List<Location> locations = new ArrayList<>();
-    private final Set<String> occupied = new HashSet<>();
+    private final Set<String> locationKeys = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Set<String> occupied = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
     private final Random random = new Random();
 
-    public void load() {
-        locations.clear();
+    public List<Location> getLocations() {
+        return locationKeys.stream()
+                .map(s -> LocationHandler.deserialize(s, plugin))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 
-        if (!configuration.getStringList("locations").isEmpty()) {
-            for (String locStr : configuration.getStringList("locations")) {
-                Location loc = LocationHandler.deserialize(locStr, plugin);
-                locations.add(loc);
+    public void load() {
+        locationKeys.clear();
+
+        ConfigurationSection sec = configuration.getConfigurationSection("locations");
+        if (sec != null) {
+            for (String encoded : sec.getKeys(false)) {
+                try {
+                    String key = new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);
+                    locationKeys.add(key);
+                } catch (IllegalArgumentException ignored) {
+                }
             }
+            return;
+        }
+
+        List<String> legacy = configuration.getStringList("locations");
+        if (!legacy.isEmpty()) {
+            locationKeys.addAll(legacy);
+            save();
         }
     }
 
     public void save() {
         try {
-            List<String> locStr = new ArrayList<>();
-            for (Location loc : locations) {
-                locStr.add(LocationHandler.serialize(loc));
+            configuration.set("locations", null);
+
+            for (String key : locationKeys) {
+                String encoded = Base64.getEncoder().encodeToString(key.getBytes(StandardCharsets.UTF_8));
+                configuration.set("locations." + encoded, true);
             }
-            configuration.set("locations", locStr);
+
             configuration.save(file);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -48,35 +72,28 @@ public class Locations {
     }
 
     public Location acquireRandomAvailableLocation() {
-        List<Integer> availableIdx = new ArrayList<>();
-        for (int i = 0; i < locations.size(); i++) {
-            Location loc = locations.get(i);
-            String key = LocationHandler.serialize(loc);
-            if (!occupied.contains(key)) {
-                availableIdx.add(i);
-            }
+        List<String> available = new ArrayList<>();
+        for (String key : locationKeys) {
+            if (!occupied.contains(key)) available.add(key);
         }
 
-        if (availableIdx.isEmpty()) return null;
+        if (available.isEmpty()) return null;
 
-        int chosen = availableIdx.get(random.nextInt(availableIdx.size()));
-        Location chosenLoc = locations.get(chosen);
-        occupied.add(LocationHandler.serialize(chosenLoc));
+        String chosenKey = available.get(random.nextInt(available.size()));
+        Location chosenLoc = LocationHandler.deserialize(chosenKey, plugin);
+        if (chosenLoc != null) {
+            occupied.add(chosenKey);
+        }
         return chosenLoc;
     }
 
     public boolean acquire(Location location) {
         if (location == null) return false;
         String key = LocationHandler.serialize(location);
-        boolean exists = false;
-        for (Location loc : locations) {
-            if (LocationHandler.serialize(loc).equals(key)) {
-                exists = true;
-                break;
-            }
-        }
-        if (!exists) return false;
+
+        if (!locationKeys.contains(key)) return false;
         if (occupied.contains(key)) return false;
+
         occupied.add(key);
         return true;
     }
@@ -89,27 +106,15 @@ public class Locations {
     public boolean addLocation(Location location) {
         if (location == null) return false;
         String key = LocationHandler.serialize(location);
-        for (Location loc : locations) {
-            if (LocationHandler.serialize(loc).equals(key)) {
-                return false;
-            }
-        }
-        locations.add(location);
-        save();
-        return true;
+        boolean added = locationKeys.add(key);
+        if (added) save();
+        return added;
     }
 
     public boolean removeLocation(Location location) {
         if (location == null) return false;
         String key = LocationHandler.serialize(location);
-        boolean removed = false;
-        for (Iterator<Location> it = locations.iterator(); it.hasNext(); ) {
-            Location loc = it.next();
-            if (LocationHandler.serialize(loc).equals(key)) {
-                it.remove();
-                removed = true;
-            }
-        }
+        boolean removed = locationKeys.remove(key);
         if (removed) {
             occupied.remove(key);
             save();

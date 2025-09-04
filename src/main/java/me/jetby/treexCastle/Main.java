@@ -71,6 +71,12 @@ public final class Main extends JavaPlugin {
             }
         }
 
+        if (getServer().getPluginManager().getPlugin("DecentHolograms") == null) {
+            Logger.error("DecentHolograms не был найден, плагин не может без него работать!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             castlePlaceholders = new CastlePlaceholders(this);
             castlePlaceholders.register();

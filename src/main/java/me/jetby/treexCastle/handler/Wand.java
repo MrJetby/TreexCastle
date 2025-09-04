@@ -29,10 +29,9 @@ public class Wand implements Listener {
         Block block = e.getClickedBlock();
         ItemStack itemInHand = player.getItemInHand();
 
-        if (e.getClickedBlock() == null) return;
+        if (block == null) return;
 
         Location location = block.getLocation();
-
 
         if (itemInHand.hasItemMeta() && itemInHand.getItemMeta().getPersistentDataContainer().has(NAMESPACED_KEY, PersistentDataType.STRING)) {
             e.setCancelled(true);

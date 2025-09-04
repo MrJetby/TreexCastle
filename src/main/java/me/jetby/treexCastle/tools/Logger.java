@@ -13,7 +13,7 @@ public class Logger {
         Bukkit.getConsoleSender().sendMessage("§a[TreexCastle] §f"+ message);
     }
     public void success(String message) {
-        Bukkit.getConsoleSender().sendMessage("[§aTreexCastle] §a"+ message);
+        Bukkit.getConsoleSender().sendMessage("§a[TreexCastle] §a"+ message);
     }
     public void error(String message) {
         Bukkit.getConsoleSender().sendMessage("§c[TreexCastle] "+ message);

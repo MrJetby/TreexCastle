@@ -92,9 +92,12 @@ public class ShulkerCommand implements CommandExecutor, TabCompleter {
         long start = System.currentTimeMillis();
         try {
             plugin.getCfg().load();
+
             plugin.getItems().save();
             plugin.getItems().load();
+
             plugin.getTypes().load();
+
             plugin.getLocations().save();
             plugin.getLocations().load();
         } catch (Exception e) {
